@@ -18,8 +18,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - name: Release
-        run: npx semantic-release
+      - run: semantic-release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
