@@ -98,16 +98,16 @@ export default async function snobuild({
     !bundleBundleDependencies && Object.keys(pkg?.bundleDependencies || {}),
     bundleExcludes?.split?.(","),
   ].flatMap((es) => es || []);
-  if (verbose)
-    console.log({
-      bundleDependencies,
-      bundleDevDependencies,
-      bundleOptionalDependencies,
-      bundlePeerDependencies,
-      bundleBundleDependencies,
-      bundleExcludes,
-      external,
-    });
+  // if (verbose)
+  //   console.log({
+  //     bundleDependencies,
+  //     bundleDevDependencies,
+  //     bundleOptionalDependencies,
+  //     bundlePeerDependencies,
+  //     bundleBundleDependencies,
+  //     bundleExcludes,
+  //     external,
+  //   });
   if (!node && !browser) node = true;
   const baseOpts: BuildOptions = {
     sourcemap: true,
