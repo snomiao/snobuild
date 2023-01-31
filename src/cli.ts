@@ -18,7 +18,10 @@ async function cli() {
     // bundle options
     .boolean("bundle")
     .default("bundle", true)
-    .describe("bundle", "bundle deps, defaults to dependencies & bundleDependencies only")
+    .describe(
+      "bundle",
+      "bundle deps, defaults to dependencies & bundleDependencies only"
+    )
     .boolean("bundleDependencies")
     .default("bundleDependencies", false)
     .describe("bundleDependencies", "bundle package.dependencies")
@@ -27,7 +30,10 @@ async function cli() {
     .describe("bundleDevDependencies", "bundle package.devDependencies")
     .boolean("bundleOptionalDependencies")
     .default("bundleOptionalDependencies", false)
-    .describe("bundleOptionalDependencies", "bundle package.optionalDependencies")
+    .describe(
+      "bundleOptionalDependencies",
+      "bundle package.optionalDependencies"
+    )
     .boolean("bundlePeerDependencies")
     .default("bundlePeerDependencies", false)
     .describe("bundlePeerDependencies", "bundle package.peerDependencies")
@@ -36,7 +42,10 @@ async function cli() {
     .describe("bundleBundleDependencies", "bundle package.bundleDependencies")
     .string("bundleExcludes")
     .default("bundleExcludes", "")
-    .describe("bundleExcludes", "pkg names sep by ',' to dynamic import/require at runtime.")
+    .describe(
+      "bundleExcludes",
+      "pkg names sep by ',' to dynamic import/require at runtime."
+    )
     // output formats
     .string("target")
     .describe("target", "such as ESNext or ES2020 for Node16")
