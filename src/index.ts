@@ -3,12 +3,12 @@ import { readFile, stat, writeFile } from "fs/promises";
 import sortPackageJson from "sort-package-json";
 // import { exec } from "child_process";
 import snorun from "snorun";
-function matrixExpand<T extends Record<string, any[]>>(matrix: T) {
+function matrixExpand<T extends Record<string, readonly any[]>>(matrix: T) {
   return Object.entries(matrix).reduce(
     (r, [k, a]) => r.flatMap((rv) => [...a.map((v) => ({ ...rv, [k]: v }))]),
     [{}] as {
       [k in keyof T]: T[k][number];
-    }[],
+    }[]
   );
 }
 
@@ -28,7 +28,7 @@ export default async function snobuild({
   outdir = "dist" as string,
   indir = "src" as string,
   // input = "src/index.ts" as string,
-  init = undefined as boolean,
+  init = undefined as boolean | undefined,
   bundle = true as boolean,
   bundleDependencies = false as boolean,
   bundleDevDependencies = true as boolean,
@@ -36,12 +36,12 @@ export default async function snobuild({
   bundlePeerDependencies = false as boolean,
   bundleBundleDependencies = true as boolean,
   bundleExcludes = "" as string,
-  watch = undefined as boolean,
-  node = undefined as boolean,
-  browser = undefined as boolean,
+  watch = undefined as boolean | undefined,
+  node = undefined as boolean | undefined,
+  browser = undefined as boolean | undefined,
   // output setting
   target = "ESNext" as string, // es2020 for node 14, and es6 for earler version
-  verbose = undefined as boolean,
+  verbose = undefined as boolean | undefined,
   //
   legalComments = undefined as esbuild.BuildOptions["legalComments"],
   _ = undefined as any,
@@ -66,20 +66,22 @@ export default async function snobuild({
   const pkgExisted = Boolean(await stat(pkgPath).catch(() => null));
   if (!pkgExisted) throw new Error("package.json not existed");
 
-  const indexEntry = Boolean(await stat(indexPath).catch(() => null)) && indexPath;
+  const indexEntry =
+    Boolean(await stat(indexPath).catch(() => null)) && indexPath;
   const cliEntry = Boolean(await stat(cliPath).catch(() => null)) && cliPath;
-  const tsconfigExisted = Boolean(await stat(tsconfigPath).catch(() => null)) && tsconfigPath;
+  const tsconfigExisted =
+    Boolean(await stat(tsconfigPath).catch(() => null)) && tsconfigPath;
 
   const pkgJSON = await readFile(pkgPath, "utf-8");
   const pkg = JSON.parse(pkgJSON);
   if (cliEntry) pkg.bin ||= `${outdir}/cli.mjs`;
   if (cliEntry) pkg.keywords ||= [...new Set([...(pkg.keywords || []), "cli"])];
-  pkg.main ||= `${outdir}/index.cjs`;
+  // if(cjs) pkg.main ||= `${outdir}/index.cjs`;
   pkg.module ||= `${outdir}/index.mjs`;
   pkg.types ||= `${outdir}/index.d.ts`;
   pkg.type ||= `module`;
   pkg.exports ||= {};
-  pkg.exports.require ||= `./${outdir}/index.cjs`;
+  // if(cjs) pkg.exports.require ||= `./${outdir}/index.cjs`;
   pkg.exports.import ||= `./${outdir}/index.mjs`;
   pkg.files ||= [`${outdir}`];
   pkg.scripts ||= {};
@@ -95,10 +97,7 @@ export default async function snobuild({
     !bundlePeerDependencies && Object.keys(pkg?.peerDependencies || {}),
     !bundleBundleDependencies && Object.keys(pkg?.bundleDependencies || {}),
     bundleExcludes?.split?.(","),
-  ]
-    .filter(Boolean)
-    .flat()
-    .filter(Boolean);
+  ].flatMap((es) => es || []);
   if (verbose)
     console.log({
       bundleDependencies,
@@ -116,7 +115,10 @@ export default async function snobuild({
     external,
     target,
     // platform: "node", // module resolve
-    ...(node && { platform: "node", mainFields: ["module", "main", "browser"] }), // module resolve
+    ...(node && {
+      platform: "node",
+      mainFields: ["module", "main", "browser"],
+    }), // module resolve
     ...(browser && { platform: "browser" }),
     logLevel: "info",
     watch,
@@ -126,12 +128,12 @@ export default async function snobuild({
   };
   const matrix = {
     minify: [false, true],
-    format: ["esm", "cjs"] as Format[],
+    format: ["esm" /* "cjs" */] as const,
     entryName: [cliEntry && "cli", indexEntry && "index"].filter(Boolean),
   };
   const expanded = matrixExpand(matrix);
   const buildOpts = expanded.map(({ entryName, format, minify }) => {
-    const ext = { esm: ".mjs", cjs: ".cjs", iife: ".user.cjs" }[format];
+    const ext = { esm: ".mjs", /* cjs: ".cjs", */ iife: ".user.cjs" }[format];
     return {
       ...baseOpts,
       format,
@@ -146,7 +148,7 @@ export default async function snobuild({
     [
       ...buildOpts.map((e) => esbuild.build(e)),
       indexEntry && pkg.types && declarationsBuild(),
-    ].filter(Boolean), // promised obj remaind to await
+    ].filter(Boolean) // promised obj remaind to await
   );
 
   console.log(results);
@@ -172,7 +174,8 @@ export default async function snobuild({
       ].filter(Boolean);
     return tsconfigExisted
       ? await snorun(["tsc", tscWatchFlag].join(" "))
-      : await snorun(["tsc", ...tscBuildOptions(indexEntry)].join(" "));
+      : indexEntry &&
+          (await snorun(["tsc", ...tscBuildOptions(indexEntry)].join(" ")));
   }
 }
 
