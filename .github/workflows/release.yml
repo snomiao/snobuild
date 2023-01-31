@@ -19,7 +19,7 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - name: Release
-        run: pnpm run release
+        run: npx semantic-release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
