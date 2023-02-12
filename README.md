@@ -74,4 +74,6 @@ Claim your sponsorship by donating snomiao <[Email: snomiao@gmail.com](mailto:sn
 
 ### Contribute
 
-The main repo is in [here](https://github.com/snomiao/js#readme), any issue and PR's welcome.
+Contribute here: <gitpod.io/#https://github.com/snomiao/snobuild>
+
+The main repo is in [here](https://github.com/snomiao/snobuild#readme), any issue and PR's welcome.

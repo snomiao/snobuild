@@ -146,7 +146,7 @@ export default async function snobuild({
   });
   const results = await Promise.all(
     [
-      ...buildOpts.map((e) => esbuild.build(e)),
+      ...buildOpts.map((opts) => esbuild.build(opts)),
       indexEntry && pkg.types && declarationsBuild(),
     ].filter(Boolean) // promised obj remaind to await
   );
