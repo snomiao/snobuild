@@ -1,3 +1,11 @@
+# [3.5.0](https://github.com/snomiao/snobuild/compare/v3.4.6...v3.5.0) (2023-02-12)
+
+
+### Features
+
+* **importify:** drafted ([da94c10](https://github.com/snomiao/snobuild/commit/da94c10d17cca2e331a1a4191557a346c3857bc4))
+* **importify:** drafted ([0cbe59f](https://github.com/snomiao/snobuild/commit/0cbe59fc7043cbf20365073566fff299de473baf))
+
 ## [3.4.6](https://github.com/snomiao/snobuild/compare/v3.4.5...v3.4.6) (2023-02-12)
 
 
