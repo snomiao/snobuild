@@ -4,28 +4,44 @@ Pre-configured esbuild cli wrapper
 
 ## Usage
 
-```shell
-npm i -D snobuild
+### Installation
 
+```
+npm i -D snobuild
+pnpm i -D snobuild
+```
+
+```shell
 > snobuild -h
 
+snobuild
+
+build respect to package.json
+
+Commands:
+  snobuild             build respect to package.json                   [default]
+
 Options:
-      --init       initialize package.json                             [boolean]
-      --dev        +sourcemap -minify +tsc                             [boolean]
-      --prod       -sourcemap +minify                                  [boolean]
-      --lib        +bundle +external +sourcemap +minify +tsc           [boolean]
-      --deploy     +bundle -external -sourcemap +minify                [boolean]
-      --bundle     bundle deps                                         [boolean]
-      --external   bundle ignore package.json dependencies             [boolean]
-      --sourcemap  output sourcemaps                                   [boolean]
-      --minify     minify outputs                                      [boolean]
-      --tsc        run tsc                                             [boolean]
-  -i, --input      input dir                                            [string]
-  -o, --outdir     output dir                                           [string]
-  -w, --watch      watch mode                                          [boolean]
-  -s, --serve      serve mode (wip)                                    [boolean]
-  -h, --help       Show help                                           [boolean]
-  -v, --version    Show version number                                 [boolean]
+      --init                        initialize package.json by calling npm init
+                                    -y                                 [boolean]
+      --bundle                      bundle deps, defaults to dependencies & bund
+                                    leDependencies only[boolean] [default: true]
+      --bundleDependencies          bundle package.dependencies
+                                                      [boolean] [default: false]
+      --bundleDevDependencies       bundle package.devDependencies
+                                                       [boolean] [default: true]
+      --bundleOptionalDependencies  bundle package.optionalDependencies
+                                                      [boolean] [default: false]
+      --bundlePeerDependencies      bundle package.peerDependencies
+                                                      [boolean] [default: false]
+      --bundleBundleDependencies    bundle package.bundleDependencies
+                                                       [boolean] [default: true]
+      --bundleExcludes              pkg names sep by ',' to dynamic import/requi
+                                    re at runtime.        [string] [default: ""]
+      --target                      such as ESNext or ES2020 for Node16 [string]
+  -w, --watch                       watch mode                         [boolean]
+  -h, --help                        Show help                          [boolean]
+  -v, --version                     Show version number                [boolean]
 ```
 
 ## Feat
