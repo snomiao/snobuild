@@ -72,6 +72,7 @@
     "yargs": "^17.6.0"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.2",
     "@types/node": "18.8.3",
     "@types/yargs": "17.0.13",
     "esbuild": "^0.15.9",
