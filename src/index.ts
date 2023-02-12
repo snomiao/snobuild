@@ -1,4 +1,4 @@
-import esbuild, { BuildOptions, Format } from "esbuild";
+import esbuild, { BuildOptions, Format, Plugin } from "esbuild";
 import { readFile, stat, writeFile } from "fs/promises";
 import sortPackageJson from "sort-package-json";
 // import { exec } from "child_process";
@@ -21,6 +21,7 @@ export const depKeys = [
   "peerDependencies",
   "bundleDependencies",
 ] as const;
+
 /**
  * Author: snomiao <snomiao@gmail.com>
  */
@@ -72,6 +73,9 @@ export default async function snobuild({
   const tsconfigExisted =
     Boolean(await stat(tsconfigPath).catch(() => null)) && tsconfigPath;
 
+  let tasks: any[] = [];
+  indexEntry && tasks.push(declarationsBuild());
+
   const pkgJSON = await readFile(pkgPath, "utf-8");
   const pkg = JSON.parse(pkgJSON);
   if (cliEntry) pkg.bin ||= `${outdir}/cli.mjs`;
@@ -88,8 +92,12 @@ export default async function snobuild({
   pkg.scripts.build ||= "snobuild";
   pkg.scripts.prepack ||= "npm run build";
   const pkgStr = JSON.stringify(pkg, null, 2);
-  const sortedPkg = `${sortPackageJson(pkgStr)}`;
-  await writeFile(pkgPath, `${sortedPkg}\n`);
+  const sortedPkg = `${sortPackageJson(pkgStr)}\n`;
+  if (sortedPkg !== pkgJSON) {
+    writeFile(pkgPath, sortedPkg).then(() => {
+      console.log("Updated: " + pkgPath);
+    });
+  }
   const external = [
     !bundleDependencies && Object.keys(pkg?.dependencies || {}),
     !bundleDevDependencies && Object.keys(pkg?.devDependencies || {}),
@@ -98,16 +106,7 @@ export default async function snobuild({
     !bundleBundleDependencies && Object.keys(pkg?.bundleDependencies || {}),
     bundleExcludes?.split?.(","),
   ].flatMap((es) => es || []);
-  // if (verbose)
-  //   console.log({
-  //     bundleDependencies,
-  //     bundleDevDependencies,
-  //     bundleOptionalDependencies,
-  //     bundlePeerDependencies,
-  //     bundleBundleDependencies,
-  //     bundleExcludes,
-  //     external,
-  //   });
+
   if (!node && !browser) node = true;
   const baseOpts: BuildOptions = {
     sourcemap: true,
@@ -142,6 +141,7 @@ export default async function snobuild({
       entryPoints: [`${indir}/${entryName}.ts`],
       outfile: `${outdir}/${entryName}${minify ? ".min" : ""}${ext}`,
       jsx: "automatic",
+      plugins: [esbuildImportifyPlugin()],
     } as BuildOptions;
   });
   const results = await Promise.all(
@@ -181,4 +181,37 @@ export default async function snobuild({
 
 export function Configs(...args: Parameters<typeof snobuild>) {
   return args;
+}
+function esbuildImportifyPlugin(): Plugin {
+  return {
+    name: "importify",
+    setup: (build) => {
+      build.onEnd((r) =>
+        r.outputFiles?.forEach((e) => {
+          e.contents = Buffer.from(importify(e.text));
+        })
+      );
+    },
+  };
+}
+function importify(s: string) {
+  const rx =
+    /\b__require\d*?\("(_http_agent|_http_client|_http_common|_http_incoming|_http_outgoing|_http_server|_stream_duplex|_stream_passthrough|_stream_readable|_stream_transform|_stream_wrap|_stream_writable|_tls_common|_tls_wrap|assert|async_hooks|buffer|child_process|cluster|console|constants|crypto|dgram|diagnostics_channel|dns|domain|events|fs|http|http2|https|inspector|module|net|os|path|perf_hooks|process|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|trace_events|tty|url|util|v8|vm|wasi|worker_threads|zlib)"\)/gm;
+  const modules = new Map();
+  const m = s.match(/(^#!.*)([\s\S]*)/);
+  if (!m) throw new Error("");
+  const [env, content] = m.slice(1);
+  const replaced = content.replace(rx, (_, mod) => {
+    const id = `__import_${mod.toUpperCase()}`;
+    modules.set(mod, id);
+    return id;
+  });
+  let output = [
+    env,
+    [...modules.entries()]
+      .map(([key, val]) => `import ${val} from ${JSON.stringify(key)};`)
+      .join("\n"),
+    replaced,
+  ].join("\n");
+  return output;
 }
