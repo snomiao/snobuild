@@ -5,6 +5,4 @@
 # Learn more from ready-to-use templates: https://www.gitpod.io/docs/introduction/getting-started/quickstart
 
 tasks:
-  - init: pnpm install && pnpm run build && npm i -g snocommit
-
-
+  - init: pnpm install && pnpm run build && npm i -g snocommit && git config --global pull.rebase false
