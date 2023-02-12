@@ -1,3 +1,12 @@
+## [3.0.2](https://github.com/snomiao/snobuild/compare/v3.0.1...v3.0.2) (2023-02-12)
+
+
+### Bug Fixes
+
+* **semantic:** git and changelog ([2549175](https://github.com/snomiao/snobuild/commit/2549175a843392534afd16a3f107de29b03cbd1f))
+* **snobuild:** changelog plugin ([83e85a2](https://github.com/snomiao/snobuild/commit/83e85a251b1df3efa1f155d5c5aedffc67ede640))
+* **snobuild:** git ([0286048](https://github.com/snomiao/snobuild/commit/02860485c59249e1df50544e9fc23f111d878686))
+
 # Change Log
 
 All notable changes to this project will be documented in this file.
