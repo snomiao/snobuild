@@ -1,3 +1,12 @@
+## [3.4.6](https://github.com/snomiao/snobuild/compare/v3.4.5...v3.4.6) (2023-02-12)
+
+
+### Bug Fixes
+
+* **snobuild:** bump ([1cf9081](https://github.com/snomiao/snobuild/commit/1cf9081536d6d62600e51e28c75ad6459be55166))
+* **snobuild:** bump ([a2e7400](https://github.com/snomiao/snobuild/commit/a2e74003306e9dce4d81ce613e44fc80d993a73a))
+* **snobuild:** docs ([39e38d1](https://github.com/snomiao/snobuild/commit/39e38d1ccbb2c088c468794286656b5fa55fdf1a))
+
 ## [3.0.3](https://github.com/snomiao/snobuild/compare/v3.0.2...v3.0.3) (2023-02-12)
 
 
