@@ -4,7 +4,8 @@
   "description": "Easy way to use esbuild.",
   "keywords": [
     "cli",
-    "esbuild"
+    "esbuild",
+    "snobuild"
   ],
   "homepage": "https://github.com/snomiao/snobuild#readme",
   "bugs": {
