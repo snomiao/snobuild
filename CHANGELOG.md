@@ -1,3 +1,10 @@
+## [3.5.1](https://github.com/snomiao/snobuild/compare/v3.5.0...v3.5.1) (2024-05-20)
+
+
+### Bug Fixes
+
+* **main:** add types into exports ([aac24bb](https://github.com/snomiao/snobuild/commit/aac24bbe2cf2649ba6e577b257e2ffc0e92e55ab))
+
 # [3.5.0](https://github.com/snomiao/snobuild/compare/v3.4.6...v3.5.0) (2023-02-12)
 
 
