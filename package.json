@@ -37,9 +37,9 @@
   "scripts": {
     "build": "npx snobuild@3.2.10 && npm link",
     "prepack": "npm run build && npm run test",
+    "prepare": "lefthook install",
     "semantic-release": "semantic-release",
-    "test": "dist/cli.mjs --verbose && dist/cli.mjs --verbose",
-    "prepare": "husky install"
+    "test": "dist/cli.mjs --verbose && dist/cli.mjs --verbose"
   },
   "lint-staged": {
     "*.ts": [
@@ -83,8 +83,7 @@
     "@semantic-release/git": "^10.0.1",
     "@types/node": "18.8.3",
     "@types/yargs": "17.0.13",
-    "esbuild": "^0.15.9",
-    "husky": "^8.0.0",
+    "lefthook": "^1.6.12",
     "lint-staged": "^13.1.1",
     "prettier": "^2.8.4",
     "semantic-release": "^20.1.0",
