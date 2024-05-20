@@ -87,6 +87,7 @@ export default async function snobuild({
   pkg.exports ||= {};
   // if(cjs) pkg.exports.require ||= `./${outdir}/index.cjs`;
   pkg.exports.import ||= `./${outdir}/index.mjs`;
+  pkg.exports.types ||= `./${outdir}/index.d.ts`;
   pkg.files ||= [`${outdir}`];
   pkg.scripts ||= {};
   pkg.scripts.build ||= "snobuild";
