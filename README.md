@@ -1,4 +1,4 @@
-# snobuild (WIP)
+# snobuild (archived)
 
 Pre-configured esbuild cli wrapper
 
